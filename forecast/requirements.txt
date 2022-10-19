@@ -5,5 +5,4 @@ neuralprophet==0.3.2
 scikit-learn==1.1.2
 xgboost==1.6.2
 pmdarima==2.0.1
-joblib==1.1.0
 matplotlib==3.5.2

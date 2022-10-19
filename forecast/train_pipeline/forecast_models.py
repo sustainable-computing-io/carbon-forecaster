@@ -7,7 +7,6 @@ import os
 from pmdarima import auto_arima
 import numpy as np
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-import joblib
 from typing import Any, Dict
 import matplotlib.pyplot as plt
 from enum import Enum
@@ -320,7 +319,7 @@ class ARIMAModel(GenericCarbonIntensityForecastModel):
             self.model.update(self.train_df)
             f, ci, mae, mse, r2 = self.__forecast_test_dataset()
         
-        #self.arima_plot_results(f, ci)
+        self.arima_plot_results(f, ci)
 
         self.recent_results = {"forecasts": f, "confidence": ci, "mae": mae, "mse": mse, "r2": r2}
 
@@ -328,8 +327,8 @@ class ARIMAModel(GenericCarbonIntensityForecastModel):
     def save(self) -> None:
         # save model
         try:
-            with open(os.path.join(self.save_location, self.filename), 'wb') as fo:
-                joblib.dump(self.model, fo)
+            with open(os.path.join(self.save_location, self.filename), 'wb') as pkl:
+                pickle.dump(self.model, pkl)
         except:
             raise Exception("failed to save model")
 
@@ -337,7 +336,8 @@ class ARIMAModel(GenericCarbonIntensityForecastModel):
     def load(self) -> None:
         # reload model
         try:
-            self.model = joblib.load(os.path.join(self.save_location, self.filename))
+            with open(os.path.join(self.save_location, self.filename), 'rb') as pkl:
+                self.model = pickle.load(pkl)
         except:
             raise Exception("failed to reload model")
     
